@@ -1,0 +1,35 @@
+{
+  "name": "chexiang_fed_cli",
+  "version": "0.0.1",
+  "description": "CheXiang Front-End Web Developer Command Line Tool",
+  "main": "index.js",
+  "scripts": {
+    "test": "none"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/513255181/cx_fed_tool.git"
+  },
+  "keywords": [
+    "chexiang",
+    "CheXiang",
+    "chexiang_fed",
+    "cx",
+    "cx_fed"
+  ],
+  "author": "zhangbingqi",
+  "license": "ISC",
+  "preferGlobal": true,
+  "bin": {
+    "fed": "./bin/fed.js"
+  },
+  "bugs": {
+    "url": "https://github.com/513255181/cx_fed_tool/issues"
+  },
+  "homepage": "https://github.com/513255181/cx_fed_tool#readme",
+  "dependencies": {
+    "bluebird": "^3.4.7",
+    "commander": "^2.9.0",
+    "fs-extra": "^2.0.0"
+  }
+}
