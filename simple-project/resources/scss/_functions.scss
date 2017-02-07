@@ -79,7 +79,7 @@ $wide-screen: "(min-width: #{$max-breakpoint}px)";
 }
 
 /***** add by fuyun px-rem ******/
-@function pxToRem($value, $base:1500) {  
+@function pxToRem($value, $base:750) {  
   @if unit($value) == "px" or unit($value) == "" {
     @return (strip-unit($value) / ($base / 10)) * 1rem;
   }@else {
@@ -118,11 +118,4 @@ $wide-screen: "(min-width: #{$max-breakpoint}px)";
   -webkit-transform: translate3d($translateX,$translateY,0);/* Safari and Chrome */
   -o-transform: translate3d($translateX,$translateY,0);/* Opera */
   -moz-transform: translate3d($translateX,$translateY,0);
-}
-
-@mixin text_overflow ($width) {
-  width: $width;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }

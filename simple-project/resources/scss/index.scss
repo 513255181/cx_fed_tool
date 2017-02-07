@@ -1,0 +1,181 @@
+@import "./_functions.scss";
+@import "./_variable.scss";
+
+@mixin text_overflow ($width) {
+	width: $width;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+#seckill {
+	background-color: $c_back5;
+	.goods_imgs{
+		position: relative;
+		background-color: $c_back7;
+		height: pxToRem(250px);
+		text-align: center;
+		border-bottom: pxToRem(1px) solid $c_border1;
+		img{
+			height: 100%;
+			width: auto;
+		}
+		a.arrows{
+			position: absolute;
+			left: pxToRem(10px);
+			top: 0;
+			border-radius: 50%;
+			display: block;
+			height: pxToRem(32px);
+			width: pxToRem(32px);
+			background-color: $c_back1;
+			img{
+				display: block;
+				width: auto;
+				margin: pxToRem(5px) auto pxToRem(5px) pxToRem(8px);
+				height: pxToRem(21px);
+			}
+		}
+		a.ellipsis{
+			position: absolute;
+			right: pxToRem(10px);
+			top: 0;
+			border-radius: 50%;
+			display: block;
+			height: pxToRem(32px);
+			width: pxToRem(32px);
+			background-color: $c_back1;
+			img{
+				display: block;
+				width: auto;
+				margin: pxToRem(14px) pxToRem(7px);
+				height: pxToRem(4px);
+			}
+		}
+	}
+	.goods_info{
+		background-color: $c_back7;
+		.goods_name{
+			padding: pxToRem(13px) 0 0 pxToRem(15px);
+			@include text_overflow(pxToRem(282px));
+			line-height: pxToRem(19px);
+			font-size: pxToRem(14px);
+		}
+		.goods_price{
+			padding: pxToRem(15px) pxToRem(15px) pxToRem(14px);
+			font-size: pxToRem(16px);
+			.after_discount{
+				display: inline-block;
+				color: $c_font2;
+				height: pxToRem(18px);
+				line-height: pxToRem(18px);
+				font-size: pxToRem(16px);
+			}
+			.discount{
+				display: inline-block;
+				margin-left: pxToRem(10px);
+				color: $c_font3;
+				height: pxToRem(12px);
+				line-height: pxToRem(12px);
+				font-size: pxToRem(10px);
+				background-color: $c_back3;
+			}
+			.mail{
+				float: right;
+				margin-top: pxToRem(7px);
+				display: inline-block;
+				background-color: $c_back4;
+				color: $c_font3;
+				font-size: pxToRem(10px);
+				height: pxToRem(12px);
+				line-height: pxToRem(12px);
+			}
+		}
+		.goods_count{
+			margin-left: pxToRem(15px);
+			border-top: 1px solid $c_border2;
+			padding: pxToRem(10px) 0 pxToRem(12px) 0;
+			font-size: pxToRem(12px);
+			.sold{
+				line-height: pxToRem(14px);
+				font-size: pxToRem(12px);
+				em{
+					color: $c_font6;
+				}
+			}
+		}
+	}
+	.goods_limit{
+		margin: pxToRem(15px) 0;
+		background-color: $c_back7;
+		padding: pxToRem(13px) pxToRem(16px) pxToRem(15px) pxToRem(15);
+		font-size: pxToRem(14px);
+		span{
+			color: $c_font1;
+			font-size: pxToRem(14px);
+			line-height: pxToRem(16px);
+		}
+		.limit_reg1{
+			padding-right: pxToRem(23px);
+		}
+		.wrap_number{
+			float: right;
+			span{
+				padding: 0 pxToRem(14px);
+			}
+			a{
+				text-align: center;
+				color: $c_font4;
+				display: inline-block;
+				width: pxToRem(22px);
+				height: pxToRem(22px);
+				background-color: $c_back5;
+			}
+		}	
+	}
+	.goods_detail{
+		background-color: $c_back7;
+		.title{
+			padding: pxToRem(12px) 0 pxToRem(15px) pxToRem(15px);
+			line-height: pxToRem(16px);
+			font-size: pxToRem(14px);
+			border-bottom: pxToRem(1px) solid $c_border2;
+		}
+		.detailtext{
+			padding: pxToRem(10px) pxToRem(13px) pxToRem(13px) pxToRem(15px);
+			p{
+				font-size: pxToRem(14px);
+				line-height: pxToRem(24px);
+			}
+		}
+	}
+	.goods_time{
+		border-top: pxToRem(1px) solid $c_border2;
+		background-color: $c_back7;
+		font-size: pxToRem(14px);
+		span{
+			height: pxToRem(16px);
+			line-height: pxToRem(16px);
+			display: inline-block;
+			padding: pxToRem(15px) 0 pxToRem(17px) pxToRem(14px);
+			font-size: pxToRem(14px);
+			em{
+				padding: 0 pxToRem(2px);
+				border-radius: pxToRem(4px);
+				color: $c_font3;
+				background-color: $c_back1;
+			}
+		}
+		button{
+			float: right;
+			background-color: $c_back6;
+			color: $c_font3;
+			font-size: pxToRem(18px);
+			width: pxToRem(120px);
+			height: pxToRem(48px);
+			border: none;
+			outline: none;
+		}
+	}
+}
+

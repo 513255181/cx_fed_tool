@@ -2,24 +2,30 @@
 
 var program = require('commander'),
 	gs = require('../lib/generateStructure'),
-	objLength = 0;
+	projcetType;
 
 program
 	.version(require('../package.json').version)
-	.option('--medium-project','创建你的中型项目')
-	.usage('[options] [project name]')
-	.parse(process.argv);
+	.command('init <projcetName>')
+	.description('创建一个项目')
+	.action(function(projectName){
+		if(program.mediumProject){
+			projcetType = 'simple-project';
+		}
+		CreateProject(projectName,projcetType);
+	});
 
-for(var i in program){
-	objLength++;
-}
+program
+	.option('--medium-project','创建一个中型项目');
 
-if(objLength <= 55){
-	program.help();
-}
+program.parse(process.argv);
 
-if(program.mediumProject){
-	var pname = program.args[0];
+var pname = program.args[0];
 	if(!pname) program.help();
-	gs(pname);
+
+
+
+function CreateProject(projectName,projcetType){
+	console.log(projcetType);
+	gs(projectName);
 }

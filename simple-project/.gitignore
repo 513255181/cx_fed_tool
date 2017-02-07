@@ -1,0 +1,8 @@
+/node_modules
+*/dist
+*/static
+.DS_Store
+*.log
+.idea
+yarn.lock
+.vscode
