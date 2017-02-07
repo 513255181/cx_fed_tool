@@ -1,0 +1,128 @@
+@charset "UTF-8";
+$rem-base: 16px !default;
+
+$modules: () !default;
+@mixin exports($name) {
+  $module_index: index($modules, $name);
+  @if (($module_index == null) or ($module_index == false)) {
+    $modules: append($modules, $name);
+    @content;
+  }
+}
+
+@function lower-bound($range){
+  @if length($range) <= 0 {
+    @return 0;
+  }
+  @return nth($range,1);
+}
+
+@function upper-bound($range) {
+  @if length($range) < 2 {
+    @return 999999999999;
+  }
+  @return nth($range, 2);
+}
+
+@function strip-unit($num) {
+  @return $num / ($num * 0 + 1);
+}
+
+@function convert-to-rem($value, $base-value: $rem-base)  {
+  $value: strip-unit($value) / strip-unit($base-value) * 1rem;
+  @if ($value == 0rem) { $value: 0; } 
+  @return $value;
+}
+
+@function data($attr) {
+  @if $namespace {
+    @return '[data-' + $namespace + '-' + $attr + ']';
+  }
+
+  @return '[data-' + $attr + ']';
+}
+
+@function rem-calc($values, $base-value: $rem-base) {
+  $max: length($values);
+
+  @if $max == 1 { @return convert-to-rem(nth($values, 1), $base-value); }
+
+  $remValues: ();
+  @for $i from 1 through $max {
+    $remValues: append($remValues, convert-to-rem(nth($values, $i), $base-value));
+  }
+  @return $remValues;
+}
+
+@function emCalc($values){
+  @return rem-calc($values);
+}
+
+@function em-calc($values){
+  @return rem-calc($values);
+}
+
+$max-breakpoint:750;
+$wide-screen: "(min-width: #{$max-breakpoint}px)";
+
+@function get-vw($target) {
+  $vw-context: ($max-breakpoint * .01) * 1px; 
+  @return ($target/$vw-context) * 1vw;
+}
+
+
+@mixin vw($size) {
+  font-size: get-vw($size);
+  @media #{$wide-screen} {
+    font-size: $size;
+  }
+}
+
+/***** add by fuyun px-rem ******/
+@function pxToRem($value, $base:1500) {  
+  @if unit($value) == "px" or unit($value) == "" {
+    @return (strip-unit($value) / ($base / 10)) * 1rem;
+  }@else {
+    @return $value;
+  }
+
+
+}
+/***** end by fuyun px-rem ******/
+
+/***** add by duanwanyu ******/
+
+@mixin tick($width,$height,$border-width,$border-color,$rotate,$translateX,$translateY){
+  width: $width;
+  height: $height;
+  border-top: $border-width solid $border-color;
+  border-left: $border-width solid $border-color;
+  transform: rotate($rotate) translate3d($translateX,$translateY,0);
+  -ms-transform: rotate($rotate) translate3d($translateX,$translateY,0); /* IE 9 */
+  -webkit-transform: rotate($rotate) translate3d($translateX,$translateY,0);/* Safari and Chrome */
+  -o-transform: rotate($rotate) translate3d($translateX,$translateY,0);/* Opera */
+  -moz-transform: rotate($rotate) translate3d($translateX,$translateY,0);
+}
+@function px2rem($px){
+  @return $px / 75 * 1rem;
+}
+
+@mixin setFont($header, $size) {
+  #{$header} {
+    font-size: px2rem($size);
+  }
+}
+@mixin translate($translateX,$translateY) {
+  transform: translate3d($translateX,$translateY,0);
+  -ms-transform: translate3d($translateX,$translateY,0); /* IE 9 */
+  -webkit-transform: translate3d($translateX,$translateY,0);/* Safari and Chrome */
+  -o-transform: translate3d($translateX,$translateY,0);/* Opera */
+  -moz-transform: translate3d($translateX,$translateY,0);
+}
+
+@mixin text_overflow ($width) {
+  width: $width;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}

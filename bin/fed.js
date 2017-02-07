@@ -1,18 +1,25 @@
 #!/usr/bin/env node
 
-var program = require('commander');
+var program = require('commander'),
+	gs = require('../lib/generateStructure'),
+	objLength = 0;
 
 program
 	.version(require('../package.json').version)
-	.option('-mp,--medium-project','创建你的中型项目')
+	.option('--medium-project','创建你的中型项目')
 	.usage('[options] [project name]')
 	.parse(process.argv);
-	
 
-var pname = program.args;
-if(program.mediumProject){
-	console.log('medium-project');
+for(var i in program){
+	objLength++;
 }
-if(pname) program.help();
 
-//gs(pname);
+if(objLength <= 55){
+	program.help();
+}
+
+if(program.mediumProject){
+	var pname = program.args[0];
+	if(!pname) program.help();
+	gs(pname);
+}
