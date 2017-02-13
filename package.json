@@ -1,6 +1,6 @@
 {
   "name": "chexiang_fed_cli",
-  "version": "0.0.3",
+  "version": "0.1.4",
   "description": "CheXiang Front-End Web Developer Command Line Tool",
   "main": "index.js",
   "scripts": {

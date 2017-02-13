@@ -16,29 +16,20 @@ var del = require('del'), //从pipeline流中删除文件
     autoprefixer = require('gulp-autoprefixer'), //自动为css添加前缀以适配不同浏览器
     sass = require('gulp-sass'), //编译scss
     inject = require('gulp-inject'), //自动插入静态文件到html
+    replace = require('gulp-replace'), //自动更换图片前缀
     gulpUtil = require("gulp-util"); //打印日志
 
 var webpackConfig = require('./webpack.config.js');
 
 var path = {
     resources: {
-        sass: './resources/scss/*.scss',
-        js: './resources/js/index.js',
-        commonjs: './resources/common/js/*.js',
-        commoncss: './resources/common/css/*.css',
-        pug: './resources/tpl/*.page.pug',
-        css: './resources/css/*.css',
-        html: './resources/html/*.page.html',
-        img: './resources/img/*'
-    },
-    catalog: {
         sass: './resources/scss/',
         js: './resources/js/',
         commonjs: './resources/common/js/',
         commoncss: './resources/common/css/',
         pug: './resources/tpl/',
-        css: './resources/css/',
-        html: './resources/html/',
+        css: './resources/css/*.css',
+        html: './resources/html/*.page.html',
         img: './resources/img/'
     },
     static: {
@@ -55,15 +46,24 @@ var path = {
     }
 }
 
+var entry = {
+    sass: '*.scss',
+    customjs: 'index.js',
+    js: '*.js',
+    css: '*.css',
+    img: '*',
+    html: '*.html',
+    pug: '*.page.pug'
+}
 
-gulp.task('clean', function() {
-    return gulp.src([path.static.html, path.dist.html])
+gulp.task('clean-static', function() {
+    return gulp.src(path.static.html)
         .pipe(clean());
 })
 
 /* img处理 */
 gulp.task('img', function() {
-    return gulp.src(path.resources.img)
+    return gulp.src(path.resources.img+entry.img)
         .pipe(plumber())
         .pipe(gulp.dest(path.static.img))
 })
@@ -71,7 +71,7 @@ gulp.task('img', function() {
 /* css操作 */
 /* 编译sass */
 gulp.task('customcss', function() {
-    return gulp.src(path.resources.sass)
+    return gulp.src(path.resources.sass+entry.sass)
         .pipe(plumber())
         .pipe(sass().on('error', gulpUtil.log))
         .pipe(autoprefixer({
@@ -97,7 +97,7 @@ gulp.task('customcss', function() {
 
 /*整合common.css*/
 gulp.task('commoncss', function() {
-    return gulp.src(path.resources.commoncss)
+    return gulp.src(path.resources.commoncss+entry.css)
         .pipe(concat('common.css'))
         .pipe(cleanCSS({
             advanced: false, //类型：Boolean 默认：true [是否开启高级优化（合并选择器等）]
@@ -115,7 +115,7 @@ gulp.task('commoncss', function() {
 /* js操作 */
 /*整合common.js*/
 gulp.task('commonjs', function() {
-    return gulp.src(path.resources.commonjs)
+    return gulp.src(path.resources.commonjs+entry.js)
         .pipe(plumber())
         .pipe(concat('common.js'))
         .pipe(plumber())
@@ -128,7 +128,7 @@ gulp.task('commonjs', function() {
 })
 /*整合custom.js*/
 gulp.task('customjs', function() {
-    return gulp.src(path.resources.js)
+    return gulp.src(path.resources.js+entry.customjs)
         .pipe(plumber())
         .pipe(webpack(webpackConfig))
         .pipe(uglify().on('error', gulpUtil.log))
@@ -141,12 +141,12 @@ gulp.task('customjs', function() {
 
 /* pug操作 */
 gulp.task('pug', function() {
-    return gulp.src(path.resources.pug)
+    return gulp.src(path.resources.pug+entry.pug)
         .pipe(pug({
             pretty: true
         }))
+        .pipe(replace(/\@{3}PREFIX\@{3}/g, '.'))
         .pipe(gulp.dest(path.static.html))
-        .pipe(gulp.dest(path.dist.html))
 })
 
 /*向html模板插入静态资源*/
@@ -202,10 +202,46 @@ gulp.task('sass', function() {
 })
 
 gulp.task('default', ['browser-sync'], function() {
-    runSequence('clean', ['img', 'pug','customcss', 'commoncss', 'customjs', 'commonjs'], 'injectjs', 'injectcss');
+    runSequence('clean-static', ['img', 'pug','customcss', 'commoncss', 'customjs', 'commonjs'], 'injectjs', 'injectcss');
     gulp.watch(path.resources.commoncss, ["css"]);
     gulp.watch(path.resources.sass, ["sass"]);
     gulp.watch(path.resources.commonjs, ["comjs"]);
     gulp.watch(path.resources.js, ["cusjs"]);
     gulp.watch(path.resources.pug, ['html']);
 });
+
+
+/*build for production*/
+gulp.task('clean-dist', function() {
+    return gulp.src(path.dist.html)
+        .pipe(clean());
+})
+
+gulp.task('copy', function() {
+    return gulp.src(path.static.html+'*/*')
+        .pipe(gulp.dest(path.dist.html))
+})
+
+/* pug操作 */
+gulp.task('pug-build', function() {
+    return gulp.src(path.resources.pug+entry.pug)
+        .pipe(pug({
+            pretty: true
+        }))
+        .pipe(replace(/\@{3}PREFIX\@{3}/g, 'http://chexiang.sit.com'))
+        .pipe(gulp.dest(path.dist.html))
+})
+
+gulp.task('inject', function() {
+    var js = gulp.src(path.dist.js+entry.js, {read: false});
+    var css = gulp.src(path.dist.css+entry.css, {read: false});
+    var prefix = 'http://chexiang.sit.com'; //静态资源链接
+    return gulp.src(path.dist.html+entry.html)
+        .pipe(inject(js, {addPrefix: prefix, relative: true}))
+        .pipe(inject(css, {addPrefix: prefix, relative: true}))
+        .pipe(gulp.dest(path.dist.html))
+})
+
+gulp.task('build', function() {
+    runSequence('clean-dist', 'copy', 'pug-build', 'inject')
+})

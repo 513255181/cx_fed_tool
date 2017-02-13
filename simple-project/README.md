@@ -10,8 +10,17 @@
 
 ## Build & Setup
 
+
+### For Develop
+
 ``` bash
 # install dependencies
 npm install
 gulp
+```
+
+### For Production
+
+``` bash
+gulp build
 ```
